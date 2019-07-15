@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Distributor Management System</title>
+<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+   <%@include file="./common/cssInclude.jsp"%>
+ 
+      <%@include file="./common/taglib.jsp"%>
+
+</head>
+<body class="skin-black dashboard-body">
+<div class="wrapper">
+
+ <%@ include file="./common/admin-header.jsp" %>
+   
+   <div id="preloader">
+               <div id="status">&nbsp;</div>
+  </div>
+   
+   <div class="content-wrapper content-wrapper-inner"> <br>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-md-4">
+          <div class="box no-border dash-border">
+            <div class="box-header no-bg pad text-center">
+              <h3 class="box-title">My Enquiry</h3>
+            </div>
+            <div class="box-body">
+              <div id="funnelChart" data-toggle="modal" data-target="#funnel_chart_Pop" class="chart" style="height: 150px; margin: 0 auto"></div>
+            </div>
+          </div>
+          <div class="box no-border dash-border">
+            <div class="box-header no-bg text-center">
+              <h3 class="box-title">Sales Invoices</h3>
+            </div>
+            <div class="box-body">
+              <div id="barChart" class="chart" style="height: 130px; margin: 0 auto"></div>
+              <button id="plain" class="btn btn-xs btn-default">Plain Bar</button>
+              <button id="inverted" class="btn btn-xs btn-default">Inverted Bar</button>
+              <button id="polar" class="btn btn-xs btn-default">Polar</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-xs-12 col-md-8">
+        <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4 flex-row">
+      <div class="box info no-border no-shadow" style="z-index:99;">
+      <div class="box-header no-bg text-center">
+      <h3 class="box-title">Requests Summary</h3>
+      <li class="dropdown lang-dropDown pull-right"><a href="#" class="link dropdown-toggle btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu small-menu">
+                  <li><a href="#detialPop" data-toggle="modal"><span>Add New</span></a></li>
+                 
+                </ul>
+          </li>
+      
+      </div>
+      <div class="box-body">
+      <div class="form-group clearfix">
+      
+      <div class="col-xs-12 col-md-12 no-padding"><button class="btn btn-default btn-block text-blue" data-toggle="dropdown"><i class="fa fa-map-marker"></i> All Distributor</button>
+      <ul class="dropdown-menu small-menu search-result">
+              <li><a href="#" data-target="#po-req" data-toggle="modal"><i class="fa fa-cubes"></i> <span>Delhi <strong>Garib Nawaj Agency</strong></span></a></li>
+              <li><a href="create-invoice.html"><i class="fa fa-cubes"></i> <span>Raigarh <strong>Laxmi Trading</strong></span></a></li>
+              
+            </ul>
+      </div>
+      
+      
+      </div>
+      <div class="members-list grouping">
+      <h4 class="section-heading clearfix"><a href="javascript:void(0)" onClick="showdetailInlineInfoTop(this)" class="text-blue btn-block"><i class="fa fa-caret-right"></i> <span>REQID001</span> <small class="text-muted pull-right">(On Process)</small></a></h4>
+      
+      </div>
+      
+      <div class="members-list grouping">
+      <h4 class="section-heading clearfix"><a href="javascript:void(0)" onClick="showdetailInlineInfoTop(this)" class="text-blue btn-block"><i class="fa fa-caret-right"></i> <span>REQID002</span> <small class="text-muted pull-right">(On Process)</small></a></h4>
+      
+      
+      </div>
+      
+      
+      
+      
+      </div>
+      
+      <div class="box-body hoverIconEnable" id="detailInlineInfo-top">
+          <h3 class="box-title no-margin-top text-black"><span></span> Detail <a href="javascript:void()" onClick="hidedetailInlineInfo()" class="text-black box-title pull-right"><i class="fa fa-close"></i></a></h3>
+          
+          <ul class="hoverIconEnable no-padding">
+          <li class="bg-gray pad list-type no-border">
+          <h4 class="section-heading text-blue">TMT-Fe500D_12_8 </h4>
+          <div class="form-group">
+          <p class="clearfix"><small class="pull-left">Qty</small> <label class="pull-right">10 (in TON)</label></p>
+          <p class="clearfix"><small class="pull-left">Status:</small> <label class="pull-right">On Quality Testing</label></p>
+          <p class="clearfix"><small class="pull-left">Date:</small> <label class="pull-right">12/09/2017</label></p>
+                </div>
+          </li>
+          
+          <li class="bg-gray pad list-type">
+          <h4 class="section-heading text-blue">TMT-Fe500D_12_16</h4>
+          <div class="form-group">
+          <p class="clearfix"><small class="pull-left">Qty</small> <label class="pull-right">20 (in TON)</label></p>
+          <p class="clearfix"><small class="pull-left">Status:</small> <label class="pull-right">On Quality Testing</label></p>
+          <p class="clearfix"><small class="pull-left">Date:</small> <label class="pull-right">12/09/2017</label></p>
+                </div>
+          </li>
+          </ul>
+          
+          
+          </div>
+      
+      
+      </div>
+      
+      
+      </div>
+        <div class="col-xs-12 col-md-4 flex-row">
+  <div class="box no-border success no-shadow">
+    <div class="box-header no-bg  text-center pad">
+      <h3 class="box-title">Area Sales Officer</h3>
+      <li class="dropdown lang-dropDown pull-right"><a href="#" class="link dropdown-toggle btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu small-menu">
+                  <li><a href="#detialPop" data-toggle="modal"><span>Add</span></a></li>
+                  <li><a href="#"><span>Edit</span></a></li>
+                </ul>
+          </li> </div>
+    <div class="box-body">
+      <div class="form-group">
+        <button class="btn btn-default btn-block text-blue" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-map-marker"></i> Delhi(NCR)</button>
+        <ul class="dropdown-menu small-menu search-result">
+          <li><a href="#" data-target="#po-req" data-toggle="modal"><i class="fa fa-cubes"></i> <span>Stock Check of <strong>Stock Yard</strong></span></a></li>
+          <li><a href="create-invoice.html"><i class="fa fa-cubes"></i> <span>Stock Check of <strong>Distributors</strong></span></a></li>
+          <li><a href="receieve-delivery.html"><i class="fa fa-cubes"></i> <span>Stock Check of <strong>Dealers</strong></span></a></li>
+        </ul>
+      </div>
+       
+       <div class="members-list grouping">
+      <h4 class="section-heading clearfix closed" onClick="openList(this)"><a href="javascript:void(0)" class="text-blue btn-block"><i class="fa fa-caret-right"></i> <i class="fa fa-caret-down"></i> Umesh Kumar</a></h4>
+      
+      <ul class="open-list" style="display:none;">
+      <li>
+      <ul>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Delhi</small></span> <small class="pull-right"><strong> 5</strong></small></a></li>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Faridabad</small></span> <small class="pull-right"><strong>2</strong></small></a></li>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Gaziabad</small></span> <small class="pull-right"><strong>3</strong></small></a></li>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Sonepat</small></span> <small class="pull-right"><strong>1</strong></small></a></li>
+      </ul>
+      
+      </li>
+      
+      
+      </ul>
+      </div>
+      
+      <div class="members-list grouping">
+      <h4 class="section-heading closed" onClick="openList(this)"><a href="javascript:void(0)" class="text-blue btn-block"><i class="fa fa-caret-right"></i> <i class="fa fa-caret-down" style="display:none;"></i> Renu Sharma (RM)</a></h4>
+      
+      <ul class="open-list" style="display:none;">
+      <li>
+     
+      <ul>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Delhi</small></span> <small class="pull-right"><strong> 5</strong></small></a></li>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Faridabad</small></span> <small class="pull-right"><strong>2</strong></small></a></li>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Gaziabad</small></span> <small class="pull-right"><strong>3</strong></small></a></li>
+      <li><a href="javascript:void(0)" class="text-black btn-block clearfix link" onClick="showdetailInlineInfo(this)"><span><small>Sonepat</small></span> <small class="pull-right"><strong>1</strong></small></a></li>
+      </ul>
+      
+      </li>
+      
+      
+      </ul>
+      </div> 
+
+    </div>
+    
+    <div class="box-body hoverIconEnable" id="detailInlineInfo">
+          <h3 class="box-title no-margin-top text-black"><span></span> Dealers <a href="javascript:void()" onClick="hidedetailInlineInfo()" class="text-black box-title pull-right"><i class="fa fa-close"></i></a></h3>
+          
+          <ul class="hoverIconEnable no-padding">
+          <li class="bg-gray pad list-type no-border">
+          <h4 class="section-heading text-blue">Garib Nawaj Agency </h4>
+          <div class="form-group">
+          <p class="clearfix"><small class="pull-left">Contact Name</small> <label class="pull-right">Pawan Kumar</label></p>
+          <p class="clearfix"><small class="pull-left">Email ID:</small> <label class="pull-right">pawan@gmail.com</label></p>
+          <p class="clearfix"><small class="pull-left">Phone No.:</small> <label class="pull-right">+91 9874785477</label></p>
+                </div>
+          </li>
+          
+          <li class="bg-gray pad list-type">
+          <h4 class="section-heading text-blue">Laxmi Trading Company</h4>
+          <div class="form-group">
+          <p class="clearfix"><small class="pull-left">Contact Name</small> <label class="pull-right">Pawan Kumar</label></p>
+          <p class="clearfix"><small class="pull-left">Email ID:</small> <label class="pull-right">pawan@gmail.com</label></p>
+          <p class="clearfix"><small class="pull-left">Phone No.:</small> <label class="pull-right">+91 9874785477</label></p>
+                </div>
+          </li>
+          </ul>
+          
+          
+          </div>
+    
+  </div>
+</div>
+        <div class="col-xs-12 col-md-4 flex-row">
+  <div class="box no-border warning no-shadow">
+    <div class="box-header no-bg  text-center pad">
+      <h3 class="box-title">Stock Avaiblity</h3>
+      <span class="pull-right"><a href="#"><i class="fa fa-map-marker"></i> 99+</a></span> </div>
+    <div class="box-body">
+      <div class="form-group">
+        <button class="btn btn-default btn-block text-blue" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-map-marker"></i> Stock Yard Nearby You</button>
+        <ul class="dropdown-menu small-menu search-result">
+          <li><a href="#" data-target="#po-req" data-toggle="modal"><i class="fa fa-cubes"></i> <span>Stock Check of <strong>Stock Yard</strong></span></a></li>
+          <li><a href="create-invoice.html"><i class="fa fa-cubes"></i> <span>Stock Check of <strong>Distributors</strong></span></a></li>
+          <li><a href="receieve-delivery.html"><i class="fa fa-cubes"></i> <span>Stock Check of <strong>Dealers</strong></span></a></li>
+        </ul>
+      </div>
+      <div class="members-list grouping">
+        <h4 class="section-heading clearfix closed" onClick="openList(this)"><a href="javascript:void(0)" class="text-blue btn-block"><i class="fa fa-caret-right"></i> <i class="fa fa-caret-down"></i> Gaziabad <small>Stock in Ton</small></a></h4>
+        <ul class="open-list" style="display: none;">
+          <li>
+            <ul>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0612</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0612_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0812</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0812_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1012</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1012_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1212</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1212_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1612</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1612_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="members-list grouping">
+        <h4 class="section-heading clearfix closed" onClick="openList(this)"><a href="javascript:void(0)" class="text-blue btn-block"><i class="fa fa-caret-right"></i> <i class="fa fa-caret-down"></i> Fridabad <small>Stock in Ton</small></a></h4>
+        <ul class="open-list" style="display:none;">
+          <li>
+            <ul>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0612</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0612_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0812</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_0812_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1012</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1012_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1212</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1212_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1612</small> <span class="pull-right"><strong>10</strong></span></a></li>
+              <li><a href="javascript:void(0)" class="text-black btn-block clearfix link"><small>T_FE500D_1612_BD</small> <span class="pull-right"><strong>5</strong></span></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="row">
+
+
+        <div class="col-xs-12 col-md-8">
+          <div class="box no-border dash-border">
+            <div class="box-header no-bg text-center">
+              <h3 class="box-title">Dealer Progress</h3>
+            </div>
+            <div class="box-body">
+              <div id="salesChart" data-toggle="modal" data-target="#sales_chart_Pop" style="min-width: 410px; max-width: 90%; height:240px; margin: 0 auto"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-xs-12 col-sm-6 col-md-4">
+      <div class="box danger no-border no-shadow" style="z-index:99;">
+      <div class="box-header no-bg text-center">
+      <h3 class="box-title">Sale / Purchase Summary
+      <div class="text-left"><small>Amount in Lac.</small></div>
+      </h3>
+      <li class="dropdown lang-dropDown pull-right"><a href="#" class="link dropdown-toggle btn btn-default btn-xs" data-toggle="dropdown" aria-expanded="true"><i class="fa fa-caret-down"></i></a>
+                <ul class="dropdown-menu small-menu">
+                  <li><a href="#detialPop" data-toggle="modal"><span>Add</span></a></li>
+                  <li><a href="#detialPop" data-toggle="modal"><span>Edit</span></a></li>
+                 
+                </ul>
+          </li>
+      
+      </div>
+      <div class="box-body">
+      <div class="form-group clearfix">
+      
+      <div class="col-xs-12 col-md-12 no-padding"><button class="btn btn-default btn-block text-blue" data-toggle="dropdown"><i class="fa fa-map-marker"></i> Sales</button>
+      <ul class="dropdown-menu small-menu search-result">
+              <li><a href="#" data-target="#po-req" data-toggle="modal"><i class="fa fa-cubes"></i> <span> <strong>Sales</strong></span></a></li>
+              <li><a href="create-invoice.html"><i class="fa fa-cubes"></i> <span> <strong>Purchase</strong></span></a></li>
+              
+            </ul>
+      </div>
+      
+      
+      </div>
+      <div class="members-list grouping">
+      <table class="table table-bordered calendar-view">
+      <tr>
+      <th onClick="showdetailInlineInfo(this)"><span>Mon</span></th>
+      <th onClick="showdetailInlineInfo(this)"><span>Tue</span></th>
+      <th onClick="showdetailInlineInfo(this)"><span>Wed</span></th>
+      <th onClick="showdetailInlineInfo(this)"><span>Thu</span></th>
+      <th onClick="showdetailInlineInfo(this)"><span>Fri</span></th>
+      <th onClick="showdetailInlineInfo(this)"><span>Sat</span></th>
+      <th onClick="showdetailInlineInfo(this)"><span>Sun</span></th>
+      </tr>
+      
+      <tr>
+      <td onClick="showdetailInlineInfo(this)"><span style="display:none;">Mon</span>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+      <td>7</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+        <td>14</td>
+      </tr>
+      <tr>
+        <td>15</td>
+        <td>16</td>
+        <td>17</td>
+        <td>18</td>
+        <td>19</td>
+        <td>20</td>
+        <td>21</td>
+      </tr>
+      
+      <tr>
+      <td>22</td>
+      <td>23</td>
+      <td>24</td>
+      <td>25</td>
+      <td>26</td>
+      <td>27</td>
+      <td>28</td>
+      </tr>
+      <tr>
+        <td>29</td>
+        <td>30</td>
+        <td>31</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      </table>
+      
+      
+      </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      </div>
+      
+      <div class="box-body hoverIconEnable" id="detailInlineInfo">
+          <h3 class="box-title no-margin-top text-black"><span></span><a href="javascript:void()" onClick="hidedetailInlineInfo()" class="text-black box-title pull-right"><i class="fa fa-close"></i></a></h3>
+          
+          <ul class="hoverIconEnable no-padding">
+          <li class="bg-gray pad list-type no-border">
+          <h4 class="section-heading text-blue"> GARIB NAWAJ CEMENT AGENCY </h4>
+          <div class="form-group">
+          <p class="clearfix"><small class="pull-left">Material</small> <label class="pull-right">TMT-Fe500D_12_12</label></p>
+          <p class="clearfix"><small class="pull-left">Qty</small> <label class="pull-right">10 (in TON)</label></p>
+          <p class="clearfix"><small class="pull-left">Date:</small> <label class="pull-right">12/09/2017</label></p>
+          <p class="clearfix"><small class="pull-left">Amount:</small> <label class="pull-right"><i class="fa fa-rupee"></i> 5</label></p>
+                </div>
+          </li>
+          
+          <li class="bg-gray pad list-type">
+          <h4 class="section-heading text-blue">  LAXMI TRADING COMPANY </h4>
+          <div class="form-group">
+           <p class="clearfix"><small class="pull-left">Material</small> <label class="pull-right">TMT-Fe500D_12_12</label></p>
+          <p class="clearfix"><small class="pull-left">Qty</small> <label class="pull-right">20 (in TON)</label></p>
+          <p class="clearfix"><small class="pull-left">Date:</small> <label class="pull-right">12/09/2017</label></p>
+          <p class="clearfix"><small class="pull-left">Amount:</small> <label class="pull-right"><i class="fa fa-rupee"></i> 5</label></p>
+                </div>
+          </li>
+          </ul>
+          
+          
+          </div>
+      
+      
+      </div>
+      
+      
+      </div>
+        
+        </div>
+        
+        </div>
+         
+
+
+
+         
+      </div>
+      <div class="row"> </div>
+      <div class="row">
+        <div class="col-xs-12 col-md-4">
+          
+        </div>
+        
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  
+   <%@include file="./common/footer.jsp"%></div>
+</div>
+
+
+
+  <%@include file="./common/jsInclude.jsp"%>
+
+<script>
+
+Highcharts.setOptions ({
+navigation: {
+        buttonOptions: {
+			enabled: false,
+        }
+    },
+	
+	credits: {
+      enabled: false
+  },
+  
+  legend: {
+            enabled: true
+        },
+
+});
+
+
+Highcharts.chart('salesChart', {
+
+    chart: {
+        type: 'heatmap',
+        marginTop: 40,
+        marginBottom: 80,
+        plotBorderWidth: 1
+    },
+
+
+    title: {
+        text: 'Distributor Sales per weekday'
+    },
+
+    xAxis: {
+        categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas', 'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
+    },
+
+    yAxis: {
+        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        title: null
+    },
+
+    colorAxis: {
+        min: 0,
+        minColor: '#FFFFFF',
+        maxColor: Highcharts.getOptions().colors[0]
+    },
+
+    legend: {
+        align: 'right',
+        layout: 'vertical',
+        margin: 0,
+        verticalAlign: 'top',
+        y: 25,
+        symbolHeight: 280
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
+                this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
+        }
+    },
+
+    series: [{
+        name: 'Sales per employee',
+        borderWidth: 1,
+        data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67], [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48], [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52], [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16], [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115], [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120], [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96], [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30], [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84], [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
+        dataLabels: {
+            enabled: true,
+            color: '#000000'
+        }
+    }]
+
+});
+
+
+var saleschart = Highcharts.chart('salesChart-d', {
+
+    chart: {
+        type: 'heatmap',
+        marginTop: 40,
+        marginBottom: 80,
+        plotBorderWidth: 1
+    },
+
+
+    title: {
+        text: 'Distributor Sales per weekday'
+    },
+
+    xAxis: {
+        categories: ['Alexander', 'Marie', 'Maximilian', 'Sophia', 'Lukas', 'Maria', 'Leon', 'Anna', 'Tim', 'Laura']
+    },
+
+    yAxis: {
+        categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        title: null
+    },
+
+    colorAxis: {
+        min: 0,
+        minColor: '#FFFFFF',
+        maxColor: Highcharts.getOptions().colors[0]
+    },
+
+    legend: {
+        align: 'right',
+        layout: 'vertical',
+        margin: 0,
+        verticalAlign: 'top',
+        y: 25,
+        symbolHeight: 280
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
+                this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
+        }
+    },
+	plotOptions: {
+	heatmap: {
+        //stacking: 'normal',
+        keys: ['x', 'y', 'value'],
+        point: {
+          events: {
+            click: function() {
+              alert(this.value);
+			  $("#sales_chart_Pop .dataTable").show().animate({"height":"410px", "opacity":"1", "top":"0"});
+            }
+          }
+        }
+      },
+	
+      candlestick: {
+         lineColor: '#404048'
+      }
+   },
+	
+
+    series: [{
+	
+	
+	
+        name: 'Sales per employee',
+        borderWidth: 1,
+		  
+        data: [[0, 0, 10], [0, 1, 19], [0, 2, 8], [0, 3, 24], [0, 4, 67], [1, 0, 92], [1, 1, 58], [1, 2, 78], [1, 3, 117], [1, 4, 48], [2, 0, 35], [2, 1, 15], [2, 2, 123], [2, 3, 64], [2, 4, 52], [3, 0, 72], [3, 1, 132], [3, 2, 114], [3, 3, 19], [3, 4, 16], [4, 0, 38], [4, 1, 5], [4, 2, 8], [4, 3, 117], [4, 4, 115], [5, 0, 88], [5, 1, 32], [5, 2, 12], [5, 3, 6], [5, 4, 120], [6, 0, 13], [6, 1, 44], [6, 2, 88], [6, 3, 98], [6, 4, 96], [7, 0, 31], [7, 1, 1], [7, 2, 82], [7, 3, 32], [7, 4, 30], [8, 0, 85], [8, 1, 97], [8, 2, 123], [8, 3, 64], [8, 4, 84], [9, 0, 47], [9, 1, 114], [9, 2, 31], [9, 3, 48], [9, 4, 91]],
+        dataLabels: {
+            enabled: true,
+            color: '#000000'
+        }
+    }]
+	
+	
+	
+
+});
+saleschart.xAxis[0].labelGroup.element.childNodes.forEach(function(label)
+{
+	label.style.cursor = "pointer";
+  label.onclick = function(){
+  	alert('You clicked on '+this.textContent);
+	$("#sales_chart_Pop .dataTable").show().animate({"height":"410px", "opacity":"1", "top":"0"});
+  }
+});
+
+
+$.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=usdeur.json&callback=?', function (data) {
+
+    Highcharts.chart('lineChart', {
+        chart: {
+            zoomType: 'x'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+                    'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+		
+        yAxis: {
+            title: {
+                text: ''
+            }
+        },
+        
+		
+		
+        plotOptions: {
+            area: {
+                fillColor: {
+                    linearGradient: {
+                        x1: 0,
+                        y1: 0,
+                        x2: 0,
+                        y2: 1
+                    },
+                    stops: [
+                        [0, Highcharts.getOptions().colors[0]],
+                        [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                    ]
+                },
+                marker: {
+                    radius: 2
+                },
+                lineWidth: 1,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                threshold: null
+            }
+        },
+
+        series: [{
+            type: 'area',
+            name: '',
+            data: data
+        }]
+    });
+});
+
+
+var chart = Highcharts.chart('barChart', {
+
+    title: {
+        text: ''
+    },
+
+    subtitle: {
+        text: ''
+    },
+	
+  legend: {
+        enabled: true
+    },
+    xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    },
+
+    series: [{
+        type: 'column',
+        colorByPoint: true,
+        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+        showInLegend: false
+    }]
+
+});
+
+
+
+
+$('#plain').click(function () {
+    chart.update({
+        chart: {
+            inverted: false,
+            polar: false
+        },
+        subtitle: {
+            text: 'Plain'
+        }
+    });
+});
+
+$('#inverted').click(function () {
+    chart.update({
+        chart: {
+            inverted: true,
+            polar: false
+        },
+        subtitle: {
+            text: 'Inverted'
+        }
+    });
+});
+
+$('#polar').click(function () {
+    chart.update({
+        chart: {
+            inverted: false,
+            polar: true
+        },
+        subtitle: {
+            text: 'Polar'
+        }
+    });
+});
+
+
+Highcharts.setOptions({
+    colors: ['#50B432', '#058DC7', '#ED561B', '#DDDF00', '#24CBE5']
+});
+Highcharts.chart('funnelChart', {
+    chart: {
+        type: 'funnel'
+    },
+    title: {
+        text: ''
+    },
+	
+	
+	
+    plotOptions: {
+        series: {
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b> ({point.y:,.0f})',
+                //color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                softConnector: true
+            },
+            center: ['40%', '50%'],
+            neckWidth: '30%',
+            neckHeight: '25%',
+            width: '80%'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    series: [{
+        name: 'Unique users',
+        data: [
+            ['Request Initiated', 5000],
+            ['Sales Order Created', 4064],
+            ['Approved Request', 1987],
+            ['Canceled', 976],
+            ['Pending Orders', 846]
+        ]
+    }]
+});
+
+Highcharts.chart('funnelChart-d', {
+    chart: {
+        type: 'funnel'
+    },
+    title: {
+        text: ''
+    },
+	
+	
+	
+    plotOptions: {
+	funnel: {
+        //stacking: 'normal',
+        //keys: ['x', 'y', 'name'],
+        point: {
+          events: {
+            click: function() {
+              alert(this.name);
+			  //$(".popup .modal-content").append("<div class='dataTable animated'><table class='table table-bordered'><tr><th>Distributor</th><th>Enquiry ID</th><th>Date</th><th>Line Items</th><th>Location</th></tr></table></div>");
+			  $("#funnel_chart_Pop .dataTable").show().animate({"height":"410px", "opacity":"1", "top":"0"});
+            }
+          }
+        }
+      },
+        series: {
+		
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b> ({point.y:,.0f})',
+                //color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                softConnector: true
+            },
+            center: ['40%', '50%'],
+            neckWidth: '30%',
+            neckHeight: '25%',
+            width: '80%'
+        },
+		
+		
+    },
+    
+    series: [{
+        name: 'Unique users',
+        data: [
+            ['Request Initiated', 5000],
+            ['Sales Order Created', 4064],
+            ['Approved Request', 1987],
+            ['Canceled', 976],
+            ['Pending Orders', 846]
+        ],
+		events: {
+                    
+					},
+    }]
+});
+
+
+
+
+$(function(){ 
+      $('.eventsBar ul').slimScroll({
+          allowPageScroll: 'false' ,
+		  height : 700,
+      });
+
+    });
+	
+
+function tooltipshow (obj){
+$(obj).children(".custom-tooltip").css({"opacity":"1"});
+$(obj).children(".custom-tooltip").addClass("slideInRight");
+
+}
+
+function tooltipshide (){
+$(".custom-tooltip").css({"opacity":"0"});
+$(".custom-tooltip").removeClass("slideInRight");
+}
+
+
+  $(function () {
+  $('.dropdown-menu a').click(function () {
+  var gettext = $(this).text(); 
+  $(".dropdown-toggle span").text(gettext);
+  });
+    $('#dataGrid').DataTable({
+     "bFilter":false,
+	 "bInfo":false,
+	 "bSort":false,
+	 "bLengthChange":false, 
+    });
+	
+	$('button[type="submit"]').click(function () {
+		toastr.options = {
+		extendedTimeOut: 1000,
+		timeOut: 5000,
+		positionClass: 'toast-top-center',
+		}
+		toastr["success"]("Request has been successfully approved.<br /><br />Thank You!")
+		});
+		
+		
+		$('.btn-reject').click(function () {
+		toastr.options = {
+		extendedTimeOut: 0,
+		timeOut: 0,
+		positionClass: 'toast-top-center',
+		}
+		toastr["error"]("Are you sure to reject a request.<br /><br /><br /><button type=\"button\" class=\"btn btn-default clear\">Yes</button>")
+		
+		});
+	
+  });
+  
+  
+  
+  function tableDataHide(obj){
+  $(obj).parent().parent(".dataTable").animate({"height":"0", "opacity":"0", "top":"0px"}).fadeOut();
+  }
+  
+ $(function(){
+ $(".pop-dismiss").click(function(){
+ $(this).parent().parent().parent().children(".modal-body").removeClass("popIn");
+ $(this).parent().parent().parent(".modal").hide();
+ 
+ });
+  });
+</script>
+
+
+</body>
+</html>

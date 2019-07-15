@@ -1,0 +1,136 @@
+package com.jspl.lms.service.impl;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.jspl.lms.dao.LeadDao;
+import com.jspl.lms.service.BulkUploadServiceLead;
+import com.jspl.lms.util.DateUtility;
+
+
+
+@Service
+public class BulkUploadServiceLeadImpl implements BulkUploadServiceLead {
+	@Autowired
+	private LeadDao leadDao;
+	@Transactional
+	public void uploadBulk(MultipartFile filePath, StringBuilder message) {
+		List sheetData = new ArrayList();
+		try {
+			Workbook workbook = null;
+			if (filePath.getOriginalFilename().toLowerCase().endsWith("xlsx")) {
+				workbook = new XSSFWorkbook(filePath.getInputStream());
+			} else if (filePath.getOriginalFilename().toLowerCase().endsWith("xls")) {
+				workbook = new HSSFWorkbook(filePath.getInputStream());
+			}
+			// Get the first sheet on the workbook.
+			Sheet sheet = workbook.getSheetAt(0);
+			// store the data read on an ArrayList
+			int maxNumOfCells = sheet.getRow(0).getLastCellNum();
+			Iterator<Row> rows = sheet.rowIterator();
+			while (rows.hasNext()) {
+				Row row = rows.next();
+				Iterator cells = row.cellIterator();
+				List data = new ArrayList();
+				for (int cellCounter = 0; cellCounter < maxNumOfCells; cellCounter++) {
+					Cell cell;
+					if (row.getCell(cellCounter) == null) {
+						cell = row.createCell(cellCounter);
+					} else {
+						cell = row.getCell(cellCounter);
+					}
+					data.add(cell);
+				}
+				sheetData.add(data);
+			}
+			showStatusExcelData(sheetData,message);
+		}catch(FileNotFoundException ex){
+			ex.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void showStatusExcelData(List sheetData, StringBuilder message) {
+		//System.out.println("started");
+        for (int i = 1; i < sheetData.size(); i++) {
+        	List oneRowRecord = new ArrayList();
+            List list = (List) sheetData.get(i);
+            for (int j = 0; j < list.size(); j++) {
+                Cell cell = (Cell) list.get(j);
+                if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                	if (DateUtil.isCellDateFormatted(cell)) {
+                        oneRowRecord.add(DateUtility.dateToStringByFormat(cell.getDateCellValue(), "MM/dd/yyyy"));
+                    } else {
+                    	oneRowRecord.add(Double.valueOf(cell.getNumericCellValue()));
+                    }
+                } else if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+                	oneRowRecord.add(cell.getRichStringCellValue());
+                } else if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
+                } else if (cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+                	oneRowRecord.add(null);
+                }
+            }
+            if(i%500==0)
+            {
+            	System.out.println("Record compleated == *500");
+            	try {
+                	Thread.sleep(2000);
+				} catch (Exception e) {
+				}
+            }
+            try{
+            	processStatusExcelData(oneRowRecord,message);
+            }catch(Exception ex){
+            	ex.printStackTrace();
+            	System.out.println("Row No "+i+" Failed");
+            	//i--;
+            	try {
+                	Thread.sleep(3000);
+				} catch (Exception e) {
+				}
+            	//ex.printStackTrace();
+            }
+        }
+    }
+	
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Transactional
+	public void processStatusExcelData(List oneRowRecord, StringBuilder message){
+
+		String customerName = oneRowRecord.get(0) != null ? oneRowRecord.get(0).toString().trim() : "";
+		String leadSource = oneRowRecord.get(1) != null ? oneRowRecord.get(1).toString().trim() : "";
+		String leadType = oneRowRecord.get(2) != null ? oneRowRecord.get(2).toString().trim() : "";
+		String sbu = oneRowRecord.get(3) != null ? oneRowRecord.get(3).toString().trim() : "";
+		String region = oneRowRecord.get(4) != null ? oneRowRecord.get(4).toString().trim() : "";
+		String material = oneRowRecord.get(5) != null ? oneRowRecord.get(5).toString().trim() : "";
+		String quantity = oneRowRecord.get(6) != null ? oneRowRecord.get(6).toString().trim() : "";
+		String contactNumber = oneRowRecord.get(7) != null ? oneRowRecord.get(7).toString().trim() : "";
+		Integer contact =new Double(contactNumber).intValue();
+		String mobile= String.valueOf(contact);
+	    leadDao.saveBulkUploadLead(customerName,leadSource,leadType,sbu,region,material,quantity,mobile);
+	
+
+	}
+}
+
+
+

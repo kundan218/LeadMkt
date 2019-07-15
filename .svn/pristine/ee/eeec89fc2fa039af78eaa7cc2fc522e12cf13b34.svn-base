@@ -1,0 +1,126 @@
+package com.jspl.lms.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.jspl.lms.dao.LeadDao;
+import com.jspl.lms.model.Country;
+import com.jspl.lms.model.LeadManage;
+import com.jspl.lms.model.LeadManageDto;
+import com.jspl.lms.model.Location;
+import com.jspl.lms.model.Material;
+import com.jspl.lms.model.Region;
+import com.jspl.lms.model.State;
+import com.jspl.lms.model.User;
+import com.jspl.lms.model.UserInfo;
+import com.jspl.lms.service.LeadService;
+
+@Service
+public class LeadServiceImpl implements LeadService {
+
+	@Autowired
+	private LeadDao leadDao;
+
+	@Override
+	@Transactional
+	public LeadManage saveLead(LeadManage leadManage) {	   
+		Date dt=new Date();
+		leadManage.setCreatedDate(new Date());
+		return leadDao.SaveLead(leadManage);
+	}
+
+	@Override
+	@Transactional
+	public List<Country> getCountry() {
+		return leadDao.getCountry();
+	}
+
+	@Override
+	@Transactional
+	public List<State> getState(Integer countryFkId) {
+		return leadDao.getState(countryFkId);
+	}
+
+	@Override
+	@Transactional
+	public List<Location> getDistrict(Integer stateFkId) {
+		return leadDao.getDistrict(stateFkId);
+	}
+
+	@Override
+	@Transactional
+	public List<Region> getRegion() {
+		// TODO Auto-generated method stub
+		return leadDao.getRegion();
+	}
+
+	@Override
+	@Transactional
+	public List<Material> getMaterial(Integer sbuFkId) {
+		return leadDao.getMaterial(sbuFkId);
+	}
+
+	@Override
+	@Transactional
+	public Integer getAssignedRsm(Integer regionId) {
+
+		return leadDao.getAssignedRsm(regionId);
+	}
+
+	@Override
+	@Transactional
+	public LeadManage getLeadDetails(Integer leadManagePkId) {
+		return leadDao.getLeadDetails(leadManagePkId);
+
+	}
+
+	@Override
+	@Transactional
+	public void cancelLead(Integer status,Integer leadManagePkId, String comment) {
+		leadDao.cancelLead(status,leadManagePkId,comment);
+	}
+
+	@Override
+	@Transactional
+	public List<Location> getLocationList() {
+		return leadDao.getLocationList();
+
+	}
+
+	@Override
+	@Transactional
+	public List<User> getSmList() {
+		return leadDao.getSmList();
+
+	}
+
+	@Override
+	@Transactional
+	public void assignLeadByRsm(Integer leadManagePkId, Integer status, Integer userPkId,String roleList) {
+		leadDao.assignLeadByRsm(leadManagePkId,status,userPkId,roleList);
+	}
+
+	@Override
+	@Transactional
+	public void assignLeadActionByRsm(Integer leadManagePkId, Integer action, String comment) {
+		leadDao.assignLeadActionByRsm(leadManagePkId,action,comment);	
+	}
+
+	@Override
+	@Transactional
+	public List<User> getStockyardList() {
+		return leadDao.getStockyardList();
+	}
+
+	@Override
+	@Transactional
+	public void assignLeadActionBySales(Integer leadManagePkId, Integer smPkId,Integer status) {
+		leadDao.assignLeadActionBySales(leadManagePkId,smPkId,status);	
+	}
+
+}
+

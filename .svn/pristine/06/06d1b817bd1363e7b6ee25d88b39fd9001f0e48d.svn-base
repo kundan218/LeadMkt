@@ -1,0 +1,610 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>CRM</title>
+</head>
+<%@include file="./common/cssInclude.jsp"%>
+<%@include file="./common/taglib.jsp"%>
+<%@include file="./common/jsInclude.jsp"%>
+<script src="<%=request.getContextPath()%>/include/js/angular/controllers/DashBoardController.js"></script>
+<script src="<%=request.getContextPath()%>/include/js/angular/services/DashBoardService.js"></script>
+<style>
+.main-header{ display:block;}
+</style>
+
+
+</head>
+<body class="sidebar-mini skin-black wysihtml5-supported sidebar-collapse" ng-init="init()" ng-app="leadApp" ng-controller="DashBoardController">
+<div class="wrapper">
+<%@include file="./common/header.jsp"%>       
+       <div class="content-wrapper" style="margin-left:0 !important;">
+      <div class="container-fluid">
+      <div class="row">
+     <div class="col-md-10 no-padding">
+      <div class="box no-border">
+      <div class="box-header no-margin-bottom">
+									<h3 class="box-title">
+										<strong>Weekly Lead Status </strong>
+									
+									</h3>
+									<div class="pull-right">
+      <a href="javascript:history.back(-1)" class="btn btn-default">Back</a>
+    <!--   <button type="button" class="btn btn-warning" data-target="#bulkPopup" data-toggle="modal">Bulk Upload</button> -->
+      </div>
+								</div>
+      
+   <div class="box-body">
+         
+         <div role="tabpanel" class="box-body no-padding">
+                <div class="table-responsive">                    
+                    <table  datatable="" dt-options="dtOptionsLeadManage" dt-columns="dtColumnsLeadManage" class="table table-bordered table-condensed"></table>
+                    </div>
+               </div> 
+               </div> 
+              </div>   
+        </div>
+        <div class="col-md-2 no-padding h-95" style="background-color:#e3e8e9;">
+        <div class="form-group no-margin-bottom" style="background-color:#d9dfe1;">
+       <select class="form-control" ng-model="regionList" ng-change="assigned(regionList)" ng-options="x as x.regionName for x in region track by x.regionPkId">
+       		<option value="">Select Region</option>
+       		</select>
+        </div>
+        
+        
+        
+        <ul class="userList no-padding" >
+        <li><label class="no-margin">My Reporting RSM </lable></li>
+        <li ng-repeat="rm in regionRsm track by $index" >
+        <a href="#" class="clearfix d-flex">
+        <span class="pull-left userInfo">
+        <small class="text-black text-nowrap">{{rm.name}}</small>
+        <small class="text-muted text-nowrap">{{rm.email}}</small>
+        <small class="text-muted text-nowrap">{{rm.contactNumber}}</small>
+        <br>
+        <small class="text-muted text-nowrap">{{rm.region}}</small>
+        </br>
+        </span>
+        </a>
+        </li>
+        
+        
+        </ul>
+        
+        <ul class="userList no-padding" >
+        <li><label class="no-margin">My Reporting SO </lable></li>
+        <li ng-repeat="rm in regionSo track by $index" >
+        <a href="#" class="clearfix d-flex">
+        <span class="pull-left userInfo">
+        <small class="text-black text-nowrap">{{rm.name}}</small>
+        <small class="text-muted text-nowrap">{{rm.email}}</small>
+        <small class="text-muted text-nowrap">{{rm.contactNumber}}</small>
+        <br>
+        <small class="text-muted text-nowrap">{{rm.region}}</small>
+        </br>
+        </span>
+        </a>
+        </li>       
+        </ul>
+    
+        </div> 
+        </div>
+        </div>
+        </div>
+
+        </div>
+  
+
+<footer class="dashboard-footer main-footer no-margin text-center">Copyright &copy; 2019-2020 Jindal Steel and Power. All rights reserved.</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+
+
+function assignPopupHide() {
+    $("#assign-sales").modal('hide');
+	$("#thanks-message").modal('show');
+	
+	$(".btn-cancelAssign").hide();
+	$(".btn-reminder").show();
+	$(".status-pending").hide();
+	$(".status-process").show();
+	$(".status-canceled").hide();
+}
+
+function cancelPopupHide() {
+    $("#assign-sales").modal('hide');
+	$("#cancel-message").modal('show');
+	$(".status-pending").hide();
+	$(".status-process").hide();
+	$(".status-canceled").show();
+	$(".btn-cancelAssign").hide();
+	$(".btn-reminder").show();
+}
+
+function showmanager(obj) {
+	//var getVal = $(obj).val();
+	$("#manager").show(); 
+		
+     
+}
+
+Highcharts.chart('areaChart', {
+    chart: {
+        type: 'areaspline'
+    },
+    title: {
+        text: ''
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'center',
+        verticalAlign: 'top',
+        x: 0,
+        y: 0,
+        floating: true,
+        borderWidth: 0,
+        backgroundColor:'#FFFFFF'
+    },
+	exporting: {
+            buttons: {
+                contextButton: {
+                    enabled: false
+                },
+                printButton: {
+                    text: 'Print',
+                    onclick: function () {
+                        this.print();
+                    }
+                }
+            }
+        },
+    xAxis: {
+        categories: [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday'
+        ],
+        plotBands: [{ // visualize the weekend
+            from: 4.5,
+            to: 6.5,
+            color: 'rgba(68, 170, 213, 0.0)',
+			
+        }]
+    },
+    yAxis: {
+        title: {
+            text: 'Orders in Tonage'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: ' units'
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 1,
+
+			color: "#3ab6dc",
+			borderWidth:'0'
+            
+        
+        }
+    },
+    series: [{
+        name: 'Delhi',
+        data: [0, 3, 1, 5, 1, 5, 0],
+		borderColor: '#ffffff',
+		borderWidth:'0'
+    }, ]
+});
+
+</script>
+<script type="text/ng-template" id="assignLead.html">
+<div class="modal-dialog"> 
+<div class="modal-content h-100">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">New Leads to Assign</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row lead-popup-box">
+<form name="leadForm">
+      	<div class="col-md-12">
+          <div class="box shadow">
+          <div class="box-header bg-faded p-2">
+          <h5><span></span>{{leadDetails.name}}<small>Inq. From: <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></small>
+          <span class="pull-right text-orange"><small class="text-muted">Lead Type:</small>{{leadDetails.leadTypeFkId.commonConstantValue}}</span>
+          </h5>
+          </div>
+          <div class="box-body p-2">
+          <div class="row">
+          <div class="col-md-12"><label class="text-info">Customer Detail</label></div>
+          	<div class="col-md-4"><p><i class="fa fa-building-o"></i> <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></p></div>
+          	<div class="col-md-4"><p><i class="fa fa-user"></i> <strong>{{leadDetails.name}}</strong></p></div>
+            <div class="col-md-4"><p><i class="fa fa-phone"></i> <strong>{{leadDetails.mobile}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-envelope"></i> <strong>{{leadDetails.email}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-map-marker"></i> <strong>{{leadDetails.locationFkId.locationName}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-cubes"></i> <strong>{{leadDetails.totalQuantity}}</strong> </p></div>              	 
+          </div>                 
+          </div>         
+          </div>
+          </div>
+      </div>
+      
+            	 <div class="row">
+                 <div class="col-md-12"><h4 class="text-info">Select Location to Assign Lead</h4></div>
+     	<div class="col-md-6 form-group pr-0">
+        	<label>Select Location</label>
+      <select class="form-control" ng-model="location" ng-change="showRole()"   ng-options="x as x.locationName for x in locationList track by x.locationPkId">
+      <option>---Select---</option>
+      </select>
+
+        </div>
+        </div>
+        <div class="row" ng-show="myvalue">
+     	<div class="col-md-3 pr-0">
+        	<label>Send to SM</label>
+          <select class="form-control" ng-change="selectRole(23,'SALES_MARKETING')" ng-model="sm"  ng-options="x as x.name for x in smList track by x.userPkId">
+            <option>---Select---</option>
+          </select>
+        </div>   	
+        <div class="col-md-3">
+        	<label>Send to Stockyard</label>
+            <select class="form-control" ng-change="selectRole(28,'STOCKYARD_MANAGER')" ng-model="sm" ng-options="x as x.name for x in stockyardList track by x.userPkId">
+            	 <option>---Select---</option>               
+            </select>
+        </div>
+        
+        <div class="col-md-12 mt-8 ">          
+            <button ng-click="assignLead(status,sm,leadManagePkId)" class="btn btn-lg btn-success pull-right" style="font-size: 14px; padding: 7px 26px;"><i class="fa fa-arrow-right"></i> Assign</button>
+        </div>   	
+     </div>
+</form>  
+  </div>  
+</div>
+
+</div>
+</script>
+<script type="text/ng-template" id="openLeadDeatils.html">
+<div class="modal-dialog"> 
+<div class="modal-content h-100">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Lead Details</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row lead-popup-box">
+<form name="leadForm">
+      	<div class="col-md-12">
+          <div class="box shadow">
+          
+          <div class="box-body p-2">
+          <div class="row">
+          <div class="col-md-4">
+            <label>Customer Name</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="customername" ng-model="leadDetails.name" ng-disabled="true" />
+           </div>
+          </div>
+<div class="col-md-4">
+            <label>Customer Mobile</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.mobile" disabled="disabled" />
+           </div>	
+           </div>
+          <div class="col-md-4">
+            <label>Lead Source</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Source" ng-model="leadDetails.leadSourceFkId.companyName" disabled="disabled" />
+           </div>	
+           </div>
+
+          <div class="col-md-4">
+            <label>Lead Type</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.leadTypeFkId.commonConstantValue" disabled="disabled" />
+           </div>	
+           </div>
+          
+            <div class="col-md-4">
+            <label>Region</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.regionFkId.regionName" disabled="disabled" />
+           </div>	
+           </div>
+           <div class="col-md-4">
+            <label>SBU</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.sbuFkId.commonConstantValue" disabled="disabled" />
+           </div>	
+           </div>
+           <div class="col-md-4">
+            <label>Lead Staus</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.leadStatus.commonConstantValue" disabled="disabled" />
+           </div>	
+           </div>
+
+           <div class="col-md-4" ng-if="leadDetails.leadStatus.commonConstantPkId==22">
+            <label>Assigned To</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.rsmAssignFkId.name" disabled="disabled" />
+           </div>	
+           </div>
+           <div class="col-md-4" ng-if="leadDetails.leadStatus.commonConstantPkId==25">
+            <label>Assigned To</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.convertedToSaleBy.name" disabled="disabled" />
+           </div>	
+           </div>
+           <div class="col-md-4" ng-if="leadDetails.leadStatus.commonConstantPkId==24">
+            <label>Assigned To</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.cancelledBy.name" disabled="disabled" />
+           </div>	
+           </div>
+           <div class="col-md-4" ng-if="leadDetails.leadStatus.commonConstantPkId==23">
+            <label>Assigned To</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.soAssignFkId.name" disabled="disabled" />
+           </div>	
+           </div>
+           <div class="col-md-4" ng-if="leadDetails.leadStatus.commonConstantPkId==28">
+            <label>Assigned To</label>
+			<div class="form-group">
+			<input type="text" class="form-control" name="Lead Type" ng-model="leadDetails.stockyardAssignFkId.name" disabled="disabled" />
+           </div>	
+           </div>
+        <div class="col-md-12" ng-if="leadDetails.leadStatus.commonConstantPkId==24">
+        <div class="form-group">
+        <label>Comments</label>
+        <textarea class="form-control" style="height:100px;" ng-model="leadDetails.comment" disabled="disabled"></textarea>
+        </div>
+        </div>  
+           <div class="col-md-12" ng-if="leadDetails.leadStatus.commonConstantPkId==25">
+        <div class="form-group">
+        <label>Comments</label>
+        <textarea class="form-control" style="height:100px;" ng-model="leadDetails.actionCommnet" disabled="disabled"></textarea>
+        </div>
+        </div>  
+           	<div class="col-xs-12 col-md-12" 
+														>
+														<div class="form-group">
+															<table cellpadding="0" cellspacing="0"
+																class="table-bordered table">
+																<thead>
+																	<th style="padding: 5px;">Material Name</th>
+																	<th style="padding: 5px;">Qty in TN</th>
+																	
+																	</th>
+																</thead>
+																<tbody>
+																	<tr ng-repeat="tr in leadDetails.leadMaterialMaps track by $index">
+																		<td>{{tr.materialFkId.materialDmsId}}</td>
+                                                                         <td>{{tr.quantity}}</td>														
+																	</tr>
+
+																</tbody>
+															</table>
+														</div>
+													</div>
+
+             	 
+          </div>                 
+          </div>         
+          </div>
+          </div>
+      </div>
+      
+            	
+       
+</form>  
+  </div>  
+</div>
+
+</div>
+</script>
+<script type="text/ng-template" id="assignLeadBySales.html">
+<div class="modal-dialog"> 
+<div class="modal-content h-100">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">New Leads to Assign</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row lead-popup-box">
+<form name="leadForm">
+      	<div class="col-md-12">
+          <div class="box shadow">
+          <div class="box-header bg-faded p-2">
+          <h5><span></span>{{leadDetails.name}}<small>Inq. From: <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></small>
+          <span class="pull-right text-orange"><small class="text-muted">Lead Type:</small>{{leadDetails.leadTypeFkId.commonConstantValue}}</span>
+          </h5>
+          </div>
+          <div class="box-body p-2">
+          <div class="row">
+          <div class="col-md-12"><label class="text-info">Customer Detail</label></div>
+          	<div class="col-md-4"><p><i class="fa fa-building-o"></i> <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></p></div>
+          	<div class="col-md-4"><p><i class="fa fa-user"></i> <strong>{{leadDetails.name}}</strong></p></div>
+            <div class="col-md-4"><p><i class="fa fa-phone"></i> <strong>{{leadDetails.mobile}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-envelope"></i> <strong>{{leadDetails.email}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-map-marker"></i> <strong>{{leadDetails.locationFkId.locationName}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-cubes"></i> <strong>{{leadDetails.totalQuantity}}</strong> </p></div>              	 
+          </div>                 
+          </div>         
+          </div>
+          </div>
+      </div>
+      
+            	 <div class="row">
+                 <div class="col-md-12"><h4 class="text-info">Select Location to Assign Lead</h4></div>
+     	<div class="col-md-6 form-group pr-0">
+        	<label>Select Location</label>
+      <select class="form-control" ng-model="location" ng-change="showRole()"   ng-options="x as x.locationName for x in locationList track by x.locationPkId">
+      <option>---Select---</option>
+      </select>
+
+        </div>
+        </div>
+        <div class="row" ng-show="myvalue"> 	
+        <div class="col-md-3 pr-0">
+        	<label>Send to Stockyard</label>
+            <select class="form-control" ng-model="sm" ng-options="x as x.name for x in stockyardList track by x.userPkId">
+            	 <option>---Select---</option>               
+            </select>
+        </div>
+        
+        <div class="col-md-12 mt-8 ">          
+            <button ng-click="assignLeadBySales(28,sm,leadManagePkId)" class="btn btn-lg btn-success pull-right" style="font-size: 14px; padding: 7px 26px;"><i class="fa fa-arrow-right"></i> Assign</button>
+        </div>   	
+     </div>
+</form>  
+  </div>  
+</div>
+
+</div>
+</script>
+<script type="text/ng-template" id="cancelLead.html">
+<div class="modal-dialog"> 
+<!-- Modal content-->
+<div class="modal-content h-100">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Cancel Lead</h4>
+  </div>
+  
+  
+  
+     <div class="row lead-popup-box">
+<form name="leadForm">
+      	<div class="col-md-12">
+          <div class="box shadow">
+          <div class="box-header bg-faded p-2">
+          <h5><span></span>{{leadDetails.name}}<small>Inq. From: <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></small>
+          <span class="pull-right text-orange"><small class="text-muted">Lead Type:</small>{{leadDetails.leadTypeFkId.commonConstantValue}}</span>
+          </h5>
+          </div>
+          <div class="box-body p-2">
+          <div class="row">
+          <div class="col-md-12"><label class="text-info">Customer Detail</label></div>
+          	<div class="col-md-4"><p><i class="fa fa-building-o"></i> <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></p></div>
+          	<div class="col-md-4"><p><i class="fa fa-user"></i> <strong>{{leadDetails.name}}</strong></p></div>
+            <div class="col-md-4"><p><i class="fa fa-phone"></i> <strong>{{leadDetails.mobile}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-envelope"></i> <strong>{{leadDetails.email}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-map-marker"></i> <strong>{{leadDetails.locationFkId.locationName}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-cubes"></i> <strong>{{leadDetails.totalQuantity}}</strong> </p></div>              	 
+          </div>                 
+          </div>         
+          </div>
+          </div>
+      </div>
+<div class="modal-body">
+			<div class="row">
+       		 <div class="col-md-12 col-sm-4">
+                
+        <div class="col-md-12">
+        <div class="form-group">
+        <label>Comments</label>
+        <textarea class="form-control" style="height:100px;" ng-model="comment"></textarea>
+        </div>
+        </div>        
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="cancelLead(leadManagePkId,24,comment)">Cancel Lead</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Close</button>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</script>
+<script type="text/ng-template" id="closeLead.html">
+<div class="modal-dialog"> 
+<!-- Modal content-->
+<div class="modal-content h-100">
+  <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal">&times;</button>
+    <h4 class="modal-title">Convert Lead into Sale</h4>
+  </div>
+  
+  
+  
+     <div class="row lead-popup-box">
+<form name="leadForm">
+      	<div class="col-md-12">
+          <div class="box shadow">
+          <div class="box-header bg-faded p-2">
+          <h5><span></span>{{leadDetails.name}}<small>Inq. From: <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></small>
+          <span class="pull-right text-orange"><small class="text-muted">Lead Type:</small>{{leadDetails.leadTypeFkId.commonConstantValue}}</span>
+          </h5>
+          </div>
+          <div class="box-body p-2">
+          <div class="row">
+          <div class="col-md-12"><label class="text-info">Customer Detail</label></div>
+          	<div class="col-md-4"><p><i class="fa fa-building-o"></i> <strong>{{leadDetails.leadSourceFkId.companyName}}</strong></p></div>
+          	<div class="col-md-4"><p><i class="fa fa-user"></i> <strong>{{leadDetails.name}}</strong></p></div>
+            <div class="col-md-4"><p><i class="fa fa-phone"></i> <strong>{{leadDetails.mobile}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-envelope"></i> <strong>{{leadDetails.email}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-map-marker"></i> <strong>{{leadDetails.locationFkId.locationName}}</strong> </p></div>
+            <div class="col-md-4"><p><i class="fa fa-cubes"></i> <strong>{{leadDetails.totalQuantity}}</strong> </p></div>              	 
+          </div>                 
+          </div>         
+          </div>
+          </div>
+      </div>
+<div class="modal-body">
+			<div class="row">
+       		 <div class="col-md-12 col-sm-4">
+                <div class="form-group">
+                	<label>Action</label>
+                   <select class="form-control" ng-model="action" ng-options="x as x.commonConstantValue for x in leadAction track by x.commonConstantPkId">
+                   </select>
+                </div>
+
+     	
+        <div class="col-md-12">
+        <div class="form-group">
+        <label>Comments</label>
+        <textarea class="form-control" style="height:100px;" ng-model="comment"></textarea>
+        </div>
+        </div>        
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="closeLead(leadManagePkId,action,comment)">Convert To Sale</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Close</button>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</script>
+
+</body>
+</html>

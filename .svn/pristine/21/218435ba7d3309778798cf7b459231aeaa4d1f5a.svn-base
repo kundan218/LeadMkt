@@ -1,0 +1,125 @@
+package com.jspl.lms.configuration.mvc;
+
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.ResourceBundleViewResolver;
+
+
+
+@Configuration
+@EnableWebMvc
+@EnableScheduling
+@ComponentScan(basePackages = "com.jspl.lms")
+public class AppConfig extends WebMvcConfigurerAdapter{
+	
+	
+/*	@Autowired
+	RoleToUserProfileConverter roleToUserProfileConverter;
+*/	
+
+	/**
+     * Configure ViewResolvers to deliver preferred views.
+     */
+    
+    ResourceBundle mail= ResourceBundle.getBundle("mail");
+	
+	@Override
+	public void configureViewResolvers(ViewResolverRegistry registry) {
+
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setViewClass(JstlView.class);
+		viewResolver.setPrefix("/WEB-INF/views/");
+		viewResolver.setSuffix(".jsp");
+		viewResolver.setOrder(2);
+		registry.viewResolver(viewResolver);
+	}
+	
+	/*@Bean
+	public ViewResolver resourceBundleViewResolver() {
+	   ResourceBundleViewResolver bean = new ResourceBundleViewResolver();
+	   bean.setBasename("views");
+	   bean.setOrder(1);
+	   return bean;
+	}*/
+	
+	
+	/**
+     * Configure ResourceHandlers to serve static resources like CSS/ Javascript etc...
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/include/**").addResourceLocations("/include/");
+    }
+    
+    
+
+    /**
+     * Configure MessageSource to lookup any validation/error message in internationalized property files
+     */
+    @Bean
+	public MessageSource messageSource() {
+	    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+	    messageSource.setBasename("message");
+	    return messageSource;
+	}
+    
+    /**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
+     * This is a workaround for this issue.
+     */
+    @Override
+    public void configurePathMatch(PathMatchConfigurer matcher) {
+        matcher.setUseRegisteredSuffixPatternMatch(true);
+    }
+    
+    
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver createMultipartResolver() {
+        CommonsMultipartResolver resolver=new CommonsMultipartResolver();
+        //resolver.setDefaultEncoding("utf-8");
+        return resolver;
+    }
+    
+    
+  
+    @Bean
+    public JavaMailSender javaMailService() {
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost(mail.getString("mail.smtp.host"));
+        javaMailSender.setPort(25);
+     //   javaMailSender.setPort(243);
+        
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.put("mail.smtp.starttls.enable",mail.getString("mail.smtp.starttls.enable"));
+        javaMailProperties.put("mail.smtp.auth",mail.getString("mail.smtp.auth"));
+        javaMailProperties.put("mail.imap.port", mail.getString("mail.imap.port"));
+        javaMailSender.setJavaMailProperties(javaMailProperties);
+        
+        return javaMailSender;
+    }
+   
+    
+    
+}
+

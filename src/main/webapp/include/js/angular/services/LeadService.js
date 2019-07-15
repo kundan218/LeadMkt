@@ -1,0 +1,156 @@
+leadApp.factory ('LeadService', function($http, $q){
+	
+	return {
+		
+		//saveLead
+		saveLeadManage: function(leadDetails){
+			var deferred = $q.defer();
+			$http.post('./saveLead', leadDetails).success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		
+		//bulk upload
+		 getBulkUploadExcel:function(excelUpload){
+					var deferred = $q.defer();
+					$http({method: 'POST',  
+				        url: "./bulkUploadLead",  
+				        headers: { 'Content-Type': undefined },  
+				        transformRequest: function (data) {  
+				            var formData = new FormData();  
+				            //formData.append("uploadExcel", angular.toJson(collectionOpe));  
+				            for (var i = 0; i < excelUpload.length; i++) {  
+				            	 formData.append('excelUpload', excelUpload[i]);
+				            }    
+				            return formData;  
+				        },  
+				        data: {excelUpload:excelUpload}}).success(function(result){
+						deferred.resolve(result);
+					});
+					return deferred.promise;
+			 },
+			 
+		//getLeadSource
+		getLeadSource: function(){
+			var deferred = $q.defer();
+			$http.get('./getLeadSourceList').success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		
+		//getSbu
+		getSbu: function(){
+			var deferred = $q.defer();
+			$http.get('./getSbuList').success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;	
+		},
+		
+		//getLeadType
+		getLeadType: function(){
+			var deferred = $q.defer();
+			$http.get('./getLeadType').success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+	    
+		//getCountry
+		getCountry: function(){
+			var deferred = $q.defer();
+			$http.get('./getCountry').success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		getUserDetails: function(role){
+			var deferred = $q.defer();
+			$http.get('./getUserDetails').success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		
+		//getState
+		getStateList: function(){
+			
+			var deferred = $q.defer();
+			$http.get('./getState/').success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		
+		//getMaterial
+		getMaterial: function(sbuFkId){
+			var deferred = $q.defer();
+			$http.get('./getMaterial/'+sbuFkId).success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		
+		
+		//getDistrict
+		getDistrict: function(stateFkId){
+			
+			var deferred = $q.defer();
+			$http.get('./getDistrict/'+stateFkId).success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		
+	
+		//getRegionList
+		getRegion:function(){
+			var deferred = $q.defer();
+			$http.get('./getRegion').success(function(result){
+				deferred.resolve(result);
+			});
+			return deferred.promise;
+		},
+		getRSMName:function(regionFkId){
+			//alert("dddddd")
+			var deferred = $q.defer();
+			$http.get('./getRSMName/'+regionFkId).success(function(result){ //alert(result);
+				
+				deferred.resolve(result);
+				//alert(result);
+			});
+			
+			return deferred.promise;
+		},
+	
+	deleteUser : function(userId){
+		var deferred = $q.defer();
+		$http.get('./deleteUser/'+userId).success(function(result){
+			deferred.resolve(result);
+		});
+		return deferred.promise;
+	},
+	getUserById : function(userId){
+		var deferred = $q.defer();
+		$http.get('./getUserById?userId='+userId+'').success(function(result){
+			deferred.resolve(result);
+		});
+		return deferred.promise;
+	},
+
+
+	getloginUserDetail : function(){
+		var deferred = $q.defer();
+		$http.get('./getloginUserDetail').success(function(result){
+			deferred.resolve(result);
+		});
+		return deferred.promise;
+	}
+		
+	}
+		
+	
+	
+});
